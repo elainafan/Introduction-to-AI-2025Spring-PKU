@@ -15,17 +15,20 @@ def predict(X, weight, bias):
     @return: (n,) 线性模型的输出，即wx+b
     """
     # TODO: YOUR CODE HERE
-    return X.dot(weight)+bias
+    return X.dot(weight) + bias
     raise NotImplementedError
 
+
 def sigmoid(x):
-    index_positive=np.nonzero(x>0)
-    index_negative=np.nonzero(x<0)
-    temp_x=np.zeros_like(x)
-    temp_x[index_positive]=1/(np.exp(-x[index_positive])+1)
-    temp_x[index_negative]=np.exp(x[index_negative])/(np.exp(x[index_negative])+1) 
+    index_positive = np.nonzero(x > 0)
+    index_negative = np.nonzero(x < 0)
+    temp_x = np.zeros_like(x)
+    temp_x[index_positive] = 1 / (np.exp(-x[index_positive]) + 1)
+    temp_x[index_negative] = np.exp(x[index_negative]) / (np.exp(x[index_negative]) + 1)
     return temp_x
     # 改sigmoid函数，进行分类，防止exp的正数爆
+
+
 def step(X, weight, bias, Y):
     """
     单步训练, 进行一次forward、backward和参数更新
@@ -40,11 +43,11 @@ def step(X, weight, bias, Y):
         bias: (1,) 更新后的bias参数
     """
     # TODO: YOUR CODE HERE
-    haty=sigmoid(predict(X,weight,bias))
-    loss=np.average(np.log(sigmoid(predict(X,weight,bias)*Y)))
-    d_weight=-lr*np.dot(X.T,((1-sigmoid(predict(X,weight,bias)*Y)))*Y)+2*wd*lr*weight
-    d_bias=-lr*np.average((1-sigmoid(predict(X,weight,bias))*Y)*Y)
-    weight-=d_weight
-    bias-=d_bias
-    return (haty,loss,weight,bias)
+    haty = sigmoid(predict(X, weight, bias))
+    loss = np.average(np.log(sigmoid(predict(X, weight, bias) * Y)))
+    d_weight = -lr * np.dot(X.T, (1 - sigmoid(predict(X, weight, bias) * Y)) * Y) + 2 * wd * lr * weight
+    d_bias = -lr * np.average((1 - sigmoid(predict(X, weight, bias)) * Y) * Y)
+    weight -= d_weight
+    bias -= d_bias
+    return (haty, loss, weight, bias)
     raise NotImplementedError

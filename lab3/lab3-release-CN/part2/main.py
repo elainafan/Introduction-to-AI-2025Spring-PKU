@@ -58,11 +58,9 @@ if __name__ == "__main__":
     np.random.seed(1)
     random.seed(1)
 
-
     # Alternatively, you can use other LLM models like GPT-4, etc.
     API_KEY = ""  # TODO: Replace with your own Deepseek API key
     model_name = ""  # TODO: Choose the model, "deepseek-chat" == deepseek-v3, "deepseek-reasoner" == deepseek-r1
-
 
     maze_size = np.array([8, 8])
     food_num = 20
@@ -74,7 +72,7 @@ if __name__ == "__main__":
     client = OpenAI(api_key=API_KEY, base_url="https://api.deepseek.com")
     places = []
     AI_responses = []
-    
+
     file = open("log.txt", "w+", encoding="utf-8")
     file.truncate(0)
     main()

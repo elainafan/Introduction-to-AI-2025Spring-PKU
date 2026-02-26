@@ -5,7 +5,7 @@ from utils import Particle
 ### 可以在这里写下一些你需要的变量和函数 ###
 COLLISION_DISTANCE = 1
 MAX_ERROR = 50000
-K=1.08
+K = 1.08
 ### 可以在这里写下一些你需要的变量和函数 ###
 
 
@@ -21,13 +21,13 @@ def generate_uniform_particles(walls, N):
     for _ in range(N):
         all_particles.append(Particle(1.0, 1.0, 1.0, 0.0))
     ### 你的代码 ###
-    x_max=np.max(walls,axis=0)[0]
-    y_max=np.max(walls,axis=0)[1]
+    x_max = np.max(walls, axis=0)[0]
+    y_max = np.max(walls, axis=0)[1]
     for i in range(N):
-        x_random=np.random.uniform(0,x_max)
-        y_random=np.random.uniform(0,y_max)
-        theta_random=np.random.uniform(-np.pi,np.pi)
-        all_particles[i]=Particle(x_random,y_random,theta_random,1/N)
+        x_random = np.random.uniform(0, x_max)
+        y_random = np.random.uniform(0, y_max)
+        theta_random = np.random.uniform(-np.pi, np.pi)
+        all_particles[i] = Particle(x_random, y_random, theta_random, 1 / N)
     ### 你的代码 ###
     return all_particles
 
@@ -42,7 +42,7 @@ def calculate_particle_weight(estimated, gt):
     """
     weight = 1.0
     ### 你的代码 ###
-    weight=np.exp(-K*np.linalg.norm(estimated-gt))
+    weight = np.exp(-K * np.linalg.norm(estimated - gt))
     ### 你的代码 ###
     return weight
 
@@ -59,25 +59,31 @@ def resample_particles(walls, particles: List[Particle]):
     for _ in range(len(particles)):
         resampled_particles.append(Particle(1.0, 1.0, 1.0, 0.0))
     ### 你的代码 ###
-    noise_dd=0.09
-    x_max=np.max(walls,axis=0)[0]
-    y_max=np.max(walls,axis=0)[1]
-    resample_num_list=[(int)(particl.weight*len(particles)) for particl in particles]
-    temp_sum=0
+    noise_dd = 0.09
+    x_max = np.max(walls, axis=0)[0]
+    y_max = np.max(walls, axis=0)[1]
+    resample_num_list = [(int)(particl.weight * len(particles)) for particl in particles]
+    temp_sum = 0
     for i in range(len(particles)):
         for j in range(resample_num_list[i]):
-            ddx=np.random.normal(0,noise_dd)
-            ddy=np.random.normal(0,noise_dd)
-            ddtheta=np.random.normal(0,noise_dd)
-            resampled_particles[temp_sum]=Particle(particles[i].position[0]+ddx,particles[i].position[1]+ddy,particles[i].theta+ddtheta,1.0/len(particles))
-            temp_sum+=1
-    for i in range(temp_sum,len(particles)):
-        x_random=np.random.uniform(0,x_max)
-        y_random=np.random.uniform(0,y_max)
-        theta_random=np.random.uniform(-np.pi,np.pi)
-        resampled_particles[i]=Particle(x_random,y_random,theta_random,1.0/len(particles))
+            ddx = np.random.normal(0, noise_dd)
+            ddy = np.random.normal(0, noise_dd)
+            ddtheta = np.random.normal(0, noise_dd)
+            resampled_particles[temp_sum] = Particle(
+                particles[i].position[0] + ddx,
+                particles[i].position[1] + ddy,
+                particles[i].theta + ddtheta,
+                1.0 / len(particles),
+            )
+            temp_sum += 1
+    for i in range(temp_sum, len(particles)):
+        x_random = np.random.uniform(0, x_max)
+        y_random = np.random.uniform(0, y_max)
+        theta_random = np.random.uniform(-np.pi, np.pi)
+        resampled_particles[i] = Particle(x_random, y_random, theta_random, 1.0 / len(particles))
     ### 你的代码 ###
     return resampled_particles
+
 
 def apply_state_transition(p: Particle, traveled_distance, dtheta):
     """
@@ -87,12 +93,13 @@ def apply_state_transition(p: Particle, traveled_distance, dtheta):
     particle: 按照相同方式进行移动后的粒子
     """
     ### 你的代码 ###
-    temp_theta=p.theta+dtheta
-    p.position[0]=p.position[0]+np.cos(temp_theta)*traveled_distance
-    p.position[1]=p.position[1]+np.sin(temp_theta)*traveled_distance
-    p.theta=temp_theta
+    temp_theta = p.theta + dtheta
+    p.position[0] = p.position[0] + np.cos(temp_theta) * traveled_distance
+    p.position[1] = p.position[1] + np.sin(temp_theta) * traveled_distance
+    p.theta = temp_theta
     ### 你的代码 ###
     return p
+
 
 def get_estimate_result(particles: List[Particle]):
     """
@@ -103,7 +110,7 @@ def get_estimate_result(particles: List[Particle]):
     """
     final_result = Particle()
     ### 你的代码 ###
-    particle_weight=[particle.weight for particle in particles]
-    final_result=particles[particle_weight.index(max(particle_weight))]
+    particle_weight = [particle.weight for particle in particles]
+    final_result = particles[particle_weight.index(max(particle_weight))]
     ### 你的代码 ###
     return final_result

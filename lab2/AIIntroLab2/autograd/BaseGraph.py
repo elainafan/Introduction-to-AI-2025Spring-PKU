@@ -1,24 +1,26 @@
 from .BaseNode import *
 from typing import List
 
+
 class Graph(List):
-    '''
+    """
     计算图类
-    '''
+    """
+
     def __init__(self, nodes: List[Node]):
         super().__init__()
         for node in nodes:
-            self.append(node) # 按照前向传播的顺序添加节点。注意，self本身即为存储节点的list。
+            self.append(node)  # 按照前向传播的顺序添加节点。注意，self本身即为存储节点的list。
 
     def eval(self):
         for node in self:
             node.eval()
-    
+
     def train(self):
         for node in self:
             node.train()
 
-    def flush(self):        
+    def flush(self):
         for node in self:
             node.flush()
 
@@ -54,12 +56,12 @@ class Graph(List):
         if debug:
             print("backward debug start")
         for n in reversed(self):
-            grad=n.backward(grad,debug)
+            grad = n.backward(grad, debug)
         # TODO: YOUR CODE HERE
         if debug:
             print("backward debug end")
         return grad
-    
+
     def optimstep(self, lr, wd1, wd2):
         """
         利用计算好的梯度对参数进行更新
@@ -67,11 +69,11 @@ class Graph(List):
         @param wd1: 超参数, L1正则化。选做，可不实现。
         @param wd2: 超参数, L2正则化
         @return: 不需要返回值
-        """  
+        """
         for item in self:
-            if len(item.params)>0:
-                item.params[0]-=lr*item.grad[0]-2*wd2*item.params[0]
-                item.params[1]-=lr*item.grad[1]
+            if len(item.params) > 0:
+                item.params[0] -= lr * item.grad[0] - 2 * wd2 * item.params[0]
+                item.params[1] -= lr * item.grad[1]
         # TODO: YOUR CODE HERE
 
     def parameters(self):

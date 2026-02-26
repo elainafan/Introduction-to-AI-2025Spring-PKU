@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -19,6 +19,7 @@ Pacman agents (in searchAgents.py).
 
 import util
 import heapq
+
 
 class SearchProblem:
     """
@@ -69,9 +70,11 @@ def tinyMazeSearch(problem):
     sequence of moves will be incorrect, so only use this for tinyMaze.
     """
     from game import Directions
+
     s = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s, w]
+
 
 def depthFirstSearch(problem):
     """
@@ -88,20 +91,20 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    Frontier=util.Stack()
-    Visited=[]
-    Frontier.push((problem.getStartState(),[]))
+    Frontier = util.Stack()
+    Visited = []
+    Frontier.push((problem.getStartState(), []))
     Visited.append(problem.getStartState())
-    while Frontier.isEmpty()==0:
-        state,actions=Frontier.pop()
+    while Frontier.isEmpty() == 0:
+        state, actions = Frontier.pop()
         Visited.append(state)
         if problem.isGoalState(state):
             return actions
         for next in problem.getSuccessors(state):
-            n_state=next[0]
-            n_direction=next[1]
+            n_state = next[0]
+            n_direction = next[1]
             if n_state not in Visited:
-                Frontier.push((n_state,actions+[n_direction]))
+                Frontier.push((n_state, actions + [n_direction]))
     util.raiseNotDefined()
 
 
@@ -109,7 +112,8 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
-    
+
+
 #! 例题答案如下
 # def breadthFirstSearch(problem):
 #     """Search the shallowest nodes in the search tree first."""
@@ -127,33 +131,34 @@ def breadthFirstSearch(problem):
 #         state, actions = Frontier.pop()
 #         if problem.isGoalState(state):
 #             #print 'Find Goal'
-#             return actions 
+#             return actions
 #         for next in problem.getSuccessors(state):
 #             n_state = next[0]
 #             n_direction = next[1]
 #             if n_state not in Visited:
-                
+
 #                 Frontier.push( (n_state, actions + [n_direction]) )
 #                 Visited.append( n_state )
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    Frontier=util.PriorityQueue()
-    Frontier.push((problem.getStartState(),[]),0)
-    Visited=[]
-    while Frontier.isEmpty()==0:
-        state,actions=Frontier.pop()
+    Frontier = util.PriorityQueue()
+    Frontier.push((problem.getStartState(), []), 0)
+    Visited = []
+    while Frontier.isEmpty() == 0:
+        state, actions = Frontier.pop()
         if state in Visited:
             continue
         if problem.isGoalState(state):
             return actions
         Visited.append(state)
         for next in problem.getSuccessors(state):
-            n_state=next[0]
-            n_direction=next[1]
-            n_cost=next[2]
-            Frontier.update((n_state,actions+[n_direction]),n_cost+problem.getCostOfActions(actions))
+            n_state = next[0]
+            n_direction = next[1]
+            n_cost = next[2]
+            Frontier.update((n_state, actions + [n_direction]), n_cost + problem.getCostOfActions(actions))
     util.raiseNotDefined()
 
 
@@ -164,25 +169,30 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
+
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    Frontier=util.PriorityQueue()
-    Frontier.push((problem.getStartState(),[]),0+heuristic(problem.getStartState(),problem))
-    Visited=[]
-    while Frontier.isEmpty()==0:
-        state,actions=Frontier.pop()
+    Frontier = util.PriorityQueue()
+    Frontier.push((problem.getStartState(), []), 0 + heuristic(problem.getStartState(), problem))
+    Visited = []
+    while Frontier.isEmpty() == 0:
+        state, actions = Frontier.pop()
         if state in Visited:
             continue
         if problem.isGoalState(state):
             return actions
         Visited.append(state)
         for next in problem.getSuccessors(state):
-            n_state=next[0]
-            n_direction=next[1]
-            n_cost=next[2]
-            Frontier.update((n_state,actions+[n_direction]),n_cost+problem.getCostOfActions(actions)+heuristic(n_state,problem))
+            n_state = next[0]
+            n_direction = next[1]
+            n_cost = next[2]
+            Frontier.update(
+                (n_state, actions + [n_direction]),
+                n_cost + problem.getCostOfActions(actions) + heuristic(n_state, problem),
+            )
     util.raiseNotDefined()
+
 
 # Abbreviations
 bfs = breadthFirstSearch

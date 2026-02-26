@@ -7,8 +7,8 @@ import modelMultiLayerPerceptron as MLP
 import pickle
 import YourTraining as YT
 
-class NullModel:
 
+class NullModel:
     def __init__(self):
         pass
 
@@ -22,14 +22,15 @@ class LRModel:
             self.weight, self.bias = pickle.load(f)
 
     def __call__(self, figure):
-        pred = figure @self.weight + self.bias
+        pred = figure @ self.weight + self.bias
         return 0 if pred > 0 else 1
+
 
 class TreeModel:
     def __init__(self) -> None:
         with open(Tree.save_path, "rb") as f:
             self.root = pickle.load(f)
-    
+
     def __call__(self, figure):
         return Tree.inferTree(self.root, Tree.discretize(figure.flatten()))
 
@@ -38,7 +39,7 @@ class ForestModel:
     def __init__(self) -> None:
         with open(Forest.save_path, "rb") as f:
             self.roots = pickle.load(f)
-    
+
     def __call__(self, figure):
         return Forest.infertrees(self.roots, Forest.discretize(figure.flatten()))
 
@@ -54,7 +55,8 @@ class SRModel:
         self.graph.flush()
         pred = self.graph.forward(figure, removelossnode=True)[-1]
         return np.argmax(pred, axis=-1)
-    
+
+
 class MLPModel:
     def __init__(self) -> None:
         with open(MLP.save_path, "rb") as f:
@@ -67,17 +69,21 @@ class MLPModel:
         pred = self.graph.forward(figure, removelossnode=True)[-1]
         return np.argmax(pred, axis=-1)
 
+
 class MyModel:
-    def __init__(self)->None:
-        with open(YT.save_path,"rb") as f:
-            graph=pickle.load(f)
-        self.graph=graph
+    def __init__(self) -> None:
+        with open(YT.save_path, "rb") as f:
+            graph = pickle.load(f)
+        self.graph = graph
         self.graph.eval()
-    def __call__(self,figure):
+
+    def __call__(self, figure):
         self.graph.flush()
-        pred=self.graph.forward(figure,removelossnode=True)[-1]
-        haty=np.argmax(pred,axis=-1)
+        pred = self.graph.forward(figure, removelossnode=True)[-1]
+        haty = np.argmax(pred, axis=-1)
         return haty
+
+
 modeldict = {
     "Null": NullModel,
     "LR": LRModel,
@@ -85,6 +91,5 @@ modeldict = {
     "Forest": ForestModel,
     "SR": SRModel,
     "MLP": MLPModel,
-    "Your": MyModel
+    "Your": MyModel,
 }
-
